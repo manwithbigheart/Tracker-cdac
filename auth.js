@@ -2,10 +2,33 @@ import { firebaseConfig } from './config.js';
 import { appState, defaultSyllabus } from './state.js';
 import { renderAll } from './ui.js';
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-export const auth = firebase.auth(firebaseApp);
-export const db = firebase.firestore(firebaseApp);
-export const provider = new firebase.auth.GoogleAuthProvider();
+// Wait for Firebase to load
+function waitForFirebase() {
+    return new Promise((resolve) => {
+        if (typeof firebase !== 'undefined') {
+            resolve();
+        } else {
+            const checkFirebase = setInterval(() => {
+                if (typeof firebase !== 'undefined') {
+                    clearInterval(checkFirebase);
+                    resolve();
+                }
+            }, 100);
+        }
+    });
+}
+
+let firebaseApp, auth, db, provider;
+
+async function initializeFirebase() {
+    await waitForFirebase();
+    firebaseApp = firebase.initializeApp(firebaseConfig);
+    auth = firebase.auth(firebaseApp);
+    db = firebase.firestore(firebaseApp);
+    provider = new firebase.auth.GoogleAuthProvider();
+}
+
+export { auth, db, provider };
 
 export function requestNotificationPermission() {
     if ('Notification' in window && Notification.permission === 'default') {
@@ -27,7 +50,8 @@ export function signOut() {
     auth.signOut().then(() => location.reload());
 }
 
-export function initAuth() {
+export async function initAuth() {
+    await initializeFirebase();
     auth.onAuthStateChanged(user => {
         if (user) {
             currentUid = user.uid;

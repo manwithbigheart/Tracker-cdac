@@ -25,7 +25,9 @@ window.toggleState = toggleState;
 window.switchView = switchView;
 
 // Initialize
-initAuth();
+(async () => {
+    await initAuth();
+})();
 
 // PWA
 if ("serviceWorker" in navigator) {
