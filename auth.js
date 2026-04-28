@@ -36,29 +36,85 @@ export function requestNotificationPermission() {
     }
 }
 
+function showAuthError(message, emailMode = false) {
+    const id = emailMode ? 'auth-email-error' : 'auth-error';
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.innerText = message;
+    el.classList.remove('hidden');
+}
+
+export function hideAuthErrors() {
+    document.getElementById('auth-error')?.classList.add('hidden');
+    document.getElementById('auth-email-error')?.classList.add('hidden');
+}
+
 export let currentUid = null;
 export let currentSessionId = Date.now().toString();
 
 export function signIn() {
+    hideAuthErrors();
     auth.signInWithPopup(provider).catch(e => {
-        document.getElementById('auth-error').innerText = e.message;
-        document.getElementById('auth-error').classList.remove('hidden');
+        showAuthError(e.message);
     });
+}
+
+export async function signInWithEmail() {
+    hideAuthErrors();
+    const email = document.getElementById('auth-email')?.value.trim();
+    const password = document.getElementById('auth-password')?.value;
+    if (!email || !password) {
+        showAuthError('Email and password are required.', true);
+        return;
+    }
+    try {
+        await auth.signInWithEmailAndPassword(email, password);
+    } catch (e) {
+        showAuthError(e.message, true);
+    }
+}
+
+export async function registerWithEmail() {
+    hideAuthErrors();
+    const name = document.getElementById('auth-name')?.value.trim();
+    const phone = document.getElementById('auth-phone')?.value.trim();
+    const email = document.getElementById('auth-email')?.value.trim();
+    const password = document.getElementById('auth-password')?.value;
+    if (!name || !email || !password) {
+        showAuthError('Name, email, and password are required.', true);
+        return;
+    }
+    try {
+        const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+        await userCredential.user.updateProfile({ displayName: name });
+        await db.collection('users').doc(userCredential.user.uid).set({
+            profile: { name, phone, email },
+            activeSessionId: currentSessionId
+        }, { merge: true });
+    } catch (e) {
+        showAuthError(e.message, true);
+    }
 }
 
 export function signOut() {
     auth.signOut().then(() => location.reload());
 }
 
+export function showEmailAuth() {
+    const panel = document.getElementById('email-auth-panel');
+    panel?.classList.toggle('hidden');
+}
+
 export async function initAuth() {
     await initializeFirebase();
     auth.onAuthStateChanged(user => {
+        hideAuthErrors();
         if (user) {
             currentUid = user.uid;
             document.getElementById('auth-overlay').classList.add('hidden');
-            document.getElementById('user-photo').src = user.photoURL;
+            document.getElementById('user-photo').src = user.photoURL || '';
             document.getElementById('user-photo').classList.remove('hidden');
-            document.getElementById('user-name').innerText = user.displayName;
+            document.getElementById('user-name').innerText = user.displayName || user.email || 'Member';
             db.collection('users').doc(user.uid).set({ activeSessionId: currentSessionId }, { merge: true });
             initUserData(user);
             requestNotificationPermission();

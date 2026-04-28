@@ -10,13 +10,16 @@ window.addEventListener('mousemove', (e) => {
 });
 
 // Import modules
-import { initAuth, signIn, signOut } from './auth.js';
+import { initAuth, signIn, signOut, signInWithEmail, registerWithEmail, showEmailAuth } from './auth.js';
 import { togglePomodoroUI, setTimerMode, resetPomoTimer, togglePomoTimer } from './timer.js';
 import { toggleState, switchView } from './syllabus.js';
 
 // Assign to window for onclick
 window.signIn = signIn;
 window.signOut = signOut;
+window.signInWithEmail = signInWithEmail;
+window.registerWithEmail = registerWithEmail;
+window.showEmailAuth = showEmailAuth;
 window.togglePomodoroUI = togglePomodoroUI;
 window.setTimerMode = setTimerMode;
 window.resetPomoTimer = resetPomoTimer;
