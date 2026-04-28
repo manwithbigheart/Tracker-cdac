@@ -25,17 +25,11 @@
     <script type="module" src="main.js"></script>
 
     <style>
-        body { background-color: #050505; color: #fff; overflow-x: hidden; cursor: none; }
-        
-        /* CUSTOM CURSOR */
-        #cursor-dot, #cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; }
-        #cursor-dot { width: 8px; height: 8px; background: #00f3ff; }
-        #cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(0, 243, 255, 0.5); transition: width 0.2s, height 0.2s; }
+        body { background-color: #050505; color: #fff; overflow-x: hidden; }
         
         /* NEXUS CARD (Replaces glass-panel) */
         .nexus-card {
-            background: rgba(20, 20, 20, 0.4);
-            backdrop-filter: blur(20px);
+            background: rgba(20, 20, 20, 0.9);
             border: 1px solid rgba(255, 255, 255, 0.08);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -76,9 +70,6 @@
     </style>
 </head>
 <body class="antialiased selection:bg-neon-blue selection:text-black">
-
-    <div id="cursor-dot"></div>
-    <div id="cursor-outline"></div>
     <div class="mesh-bg">
         <div class="orb w-96 h-96 bg-neon-purple/30 top-0 left-0"></div>
         <div class="orb w-[500px] h-[500px] bg-blue-900/20 bottom-0 right-0"></div>
@@ -240,12 +231,12 @@
         </div>
     </div>
 
-    <div id="pomodoro-overlay" class="fixed inset-0 z-[90] bg-black/95 backdrop-blur-3xl flex items-center justify-center hidden">
+    <div id="pomodoro-overlay" class="fixed inset-0 z-[90] bg-black/95 flex items-center justify-center hidden">
         <div class="text-center relative w-full max-w-lg">
             <button onclick="window.togglePomodoroUI()" class="absolute top-0 right-8 text-slate-500 hover:text-white transition"><i class="fa-solid fa-times text-2xl"></i></button>
             
             <div class="relative w-80 h-80 mx-auto mb-10 flex items-center justify-center">
-                 <div class="absolute w-full h-full border border-neon-blue/20 rounded-full animate-ping" style="animation-duration: 3s;"></div>
+                 <div class="absolute w-full h-full border border-neon-blue/20 rounded-full"></div>
                  
                  <svg class="progress-ring transform -rotate-90" width="300" height="300">
                     <circle class="text-white/5" stroke-width="4" stroke="currentColor" fill="transparent" r="140" cx="150" cy="150"/>
@@ -266,6 +257,7 @@
             <div class="flex justify-center gap-6">
                 <button onclick="window.togglePomoTimer()" id="pomo-action-btn" class="w-16 h-16 rounded-full bg-white text-black flex items-center justify-center text-2xl hover:bg-neon-blue transition shadow-[0_0_20px_rgba(255,255,255,0.3)]"><i class="fa-solid fa-play ml-1"></i></button>
                 <button onclick="window.resetPomoTimer()" class="w-16 h-16 rounded-full border border-white/20 text-white flex items-center justify-center text-xl hover:border-white transition"><i class="fa-solid fa-rotate-left"></i></button>
+                <button onclick="window.togglePomodoroUI()" class="w-16 h-16 rounded-full border border-white/20 text-white flex items-center justify-center text-xl hover:border-white transition"><i class="fa-solid fa-home"></i></button>
             </div>
             <div id="pomo-quote" class="mt-8 text-slate-500 font-mono text-xs uppercase">"System ready."</div>
         </div>
