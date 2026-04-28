@@ -1,5 +1,5 @@
 export const firebaseConfig = {
-    apiKey: "AIzaSyDrgpLSWCTW1Qgh4ZG6qOoBUbFRgcY0gyM",
+    
     authDomain: "pg-dac-tracker.firebaseapp.com",
     projectId: "pg-dac-tracker",
     storageBucket: "pg-dac-tracker.firebasestorage.app",
