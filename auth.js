@@ -107,40 +107,21 @@ export function showEmailAuth() {
 
 export async function initAuth() {
     await initializeFirebase();
-    auth.onAuthStateChanged(user => {
-        hideAuthErrors();
-        if (user) {
-            currentUid = user.uid;
-            document.getElementById('auth-overlay').classList.add('hidden');
-            document.getElementById('user-photo').src = user.photoURL || '';
-            document.getElementById('user-photo').classList.remove('hidden');
-            document.getElementById('user-name').innerText = user.displayName || user.email || 'Member';
-            db.collection('users').doc(user.uid).set({ activeSessionId: currentSessionId }, { merge: true });
-            initUserData(user);
-            requestNotificationPermission();
-        }
-    });
+    // Remove auth requirement - always initialize app
+    document.getElementById('auth-overlay').classList.add('hidden');
+    initUserData();
+    requestNotificationPermission();
 }
 
-async function initUserData(user) {
-    db.collection('users').doc(user.uid).onSnapshot(doc => {
-        if (doc.exists) {
-            const data = doc.data();
-            if (data.activeSessionId && data.activeSessionId !== currentSessionId) {
-                document.getElementById('session-lock').classList.remove('hidden');
-                return;
-            }
-            if (data.appState) {
-                appState = data.appState;
-                if (!appState.syllabus) appState.syllabus = JSON.parse(JSON.stringify(defaultSyllabus));
-                renderAll();
-            }
-        } else {
-            saveToCloud();
-        }
-    });
+async function initUserData() {
+    const saved = localStorage.getItem('appState');
+    if (saved) {
+        Object.assign(appState, JSON.parse(saved));
+    }
+    if (!appState.syllabus) appState.syllabus = JSON.parse(JSON.stringify(defaultSyllabus));
+    renderAll();
 }
 
 export function saveToCloud() {
-    if (currentUid) db.collection('users').doc(currentUid).set({ appState, activeSessionId: currentSessionId }, { merge: true });
+    localStorage.setItem('appState', JSON.stringify(appState));
 }
