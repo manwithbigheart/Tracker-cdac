@@ -1,0 +1,48 @@
+body { background-color: #050505; color: #fff; overflow-x: hidden; cursor: none; }
+
+/* CUSTOM CURSOR */
+#cursor-dot, #cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; z-index: 9999; pointer-events: none; }
+#cursor-dot { width: 8px; height: 8px; background: #00f3ff; }
+#cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(0, 243, 255, 0.5); transition: width 0.2s, height 0.2s; }
+
+/* NEXUS CARD (Replaces glass-panel) */
+.nexus-card {
+    background: rgba(20, 20, 20, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.nexus-card:hover {
+    border-color: rgba(0, 243, 255, 0.3);
+    box-shadow: 0 0 30px rgba(0, 243, 255, 0.1);
+}
+
+/* UTILS */
+.glow-text { text-shadow: 0 0 20px rgba(0, 243, 255, 0.6); }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: #00f3ff; }
+
+/* MESH BG */
+.mesh-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 50% 50%, #1a0b2e 0%, #000000 100%); }
+.orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.4; animation: float 10s infinite ease-in-out; }
+@keyframes float { 0%, 100% { transform: translate(0,0); } 50% { transform: translate(30px, -50px); } }
+
+/* BADGES */
+.badge-easy { background: rgba(34, 197, 94, 0.1); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2); }
+.badge-medium { background: rgba(234, 179, 8, 0.1); color: #facc15; border: 1px solid rgba(234, 179, 8, 0.2); }
+.badge-hard { background: rgba(239, 68, 68, 0.1); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); }
+
+/* INPUTS */
+input, select, textarea {
+    background: rgba(0,0,0,0.3) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    color: white !important;
+    outline: none;
+}
+input:focus, select:focus, textarea:focus { border-color: #00f3ff !important; }
+
+.checkbox-wrapper input:checked + div {
+    background: #00f3ff; box-shadow: 0 0 10px #00f3ff; border-color: transparent;
+}
